@@ -51,7 +51,23 @@ class RCCmdSubscriber(Node):
             print("power: " + str(cmds[1]))
         else:
             print("error cmd format")
-        # S_outer = S_iner + math.tan((angle_degree*math.pi)/180)*W
+        
+        #s_outer = k*s_inner
+        #k=114.59/(114.59-angle_deg)
+        #k_max could be ~5.0 for 2 90 deg turn with radius of ~2w 
+        #(w the dist between inner and outer wheels)
+        #so we make the max power of motor to be 0.2
+        #for the outer mortor to be able to reach ~5 times of s_inner
+        
+        s_inner = self.power*0.2
+        k = 114.59/(114.59-self.angle)
+        s_outer = k*s_inner
+        
+        self.motorKit.motor1 = s_inner
+        self.motorKit.motor3 = s_inner
+        
+        self.motorKit.motor2 = s_outer
+        self.motorKit.motor4 = s_outer                
 
 
 def main(args=None):
